@@ -1,0 +1,47 @@
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+.Python
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE
+*.swp
+.idea/
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files with secrets
+.env
+.env.*
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# Added for GitHub migration
+.coverage
+.pytest_cache/
+
+# Large result files (too big for GitHub)
+results/gen2.0/

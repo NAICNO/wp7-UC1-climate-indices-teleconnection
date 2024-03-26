@@ -1,0 +1,12 @@
+# ML Dependencies (for running on VM)
+numpy
+pandas
+scikit-learn
+xgboost
+scipy
+tqdm
+matplotlib
+seaborn
+pycwt
+ipywidgets
+jupyterlab

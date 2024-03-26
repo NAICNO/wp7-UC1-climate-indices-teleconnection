@@ -1,0 +1,34 @@
+{
+  "title": "NAIC WP7 UC1 — Climate Indices Teleconnection",
+  "description": "Ensemble ML pipeline for discovering climate teleconnections from NorESM simulations. Covers 65 climate indices, 5 model types, 42,613 experiments across multi-decadal timescales.",
+  "creators": [
+    {
+      "name": "Johannsen, Klaus",
+      "affiliation": "NORCE Norwegian Research Centre"
+    },
+    {
+      "name": "Otterå, Odd Helge",
+      "affiliation": "NORCE Norwegian Research Centre"
+    },
+    {
+      "name": "Evensen, Adrian",
+      "affiliation": "NORCE Norwegian Research Centre"
+    },
+    {
+      "name": "Arief, Hasan Asyari",
+      "affiliation": "NORCE Norwegian Research Centre"
+    }
+  ],
+  "keywords": [
+    "climate science",
+    "teleconnections",
+    "machine learning",
+    "NorESM",
+    "NAIC WP7"
+  ],
+  "license": {
+    "id": "GPL-3.0-only"
+  },
+  "upload_type": "software",
+  "access_right": "open"
+}

@@ -1,0 +1,89 @@
+Triple License
+
+This repository uses a triple license:
+
+1. TUTORIAL CONTENT (content/, *.md, *.ipynb files):
+   Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)
+
+2. SOFTWARE CODE (*.py, *.html, *.sh files):
+   GNU General Public License v3.0 only (GPL-3.0-only)
+
+3. CLIMATE DATA (dataset/):
+   CC BY-NC-ND 4.0 — property of NORCE Climate and Environment (see below)
+
+Copyright (c) Sigma2 / NAIC
+
+================================================================================
+
+CC BY-NC 4.0 — Tutorial Content License
+
+Creative Commons Attribution-NonCommercial 4.0 International
+
+You are free to:
+  Share — copy and redistribute the material in any medium or format
+  Adapt — remix, transform, and build upon the material
+
+Under the following terms:
+  Attribution — You must give appropriate credit, provide a link to the
+  license, and indicate if changes were made.
+  NonCommercial — You may not use the material for commercial purposes.
+
+Full text: https://creativecommons.org/licenses/by-nc/4.0/legalcode
+
+================================================================================
+
+GPL-3.0-only — Software Code License
+
+GNU GENERAL PUBLIC LICENSE
+Version 3, 29 June 2007
+
+Copyright (C) 2007 Free Software Foundation, Inc.
+<https://fsf.org/>
+
+Everyone is permitted to copy and distribute verbatim copies of this
+license document, but changing it is not allowed.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, version 3.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+Full text: https://www.gnu.org/licenses/gpl-3.0.txt
+
+================================================================================
+
+CC BY-NC-ND 4.0 — Climate Simulation Data License
+
+Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International
+
+Copyright (c) NORCE Norwegian Research Centre AS — Climate and Environment
+
+The NorESM1-F climate simulation data in the dataset/ directory is the
+property of NORCE Climate and Environment. This data was NOT produced
+under the NAIC project. It originates from NorESM1-F millennium simulations
+described in Omrani et al. (2022), NPJ Climate and Atmospheric Science.
+
+NORCE has permitted its redistribution under the following terms:
+
+You are free to:
+
+  Share — copy and redistribute the data in any medium or format
+
+Under the following terms:
+
+  Attribution — You must credit NORCE Climate and Environment as the
+  data source and cite Omrani et al. (2022).
+
+  NonCommercial — You may not use the data for commercial purposes.
+
+  NoDerivatives — If you remix, transform, or build upon the data, you
+  may not distribute the modified material.
+
+Full license text: https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode

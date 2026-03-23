@@ -1,0 +1,10 @@
+# Test dependencies (CI-friendly, no GPU/notebook packages)
+numpy
+pandas
+scikit-learn
+scipy
+tqdm
+matplotlib
+seaborn
+pytest
+pytest-cov

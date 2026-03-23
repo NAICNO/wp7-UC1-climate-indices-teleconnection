@@ -1,0 +1,215 @@
+# AI Agent Configuration for Teleconnections Demonstrator
+# Machine-readable instructions for AI coding assistants
+
+metadata:
+  name: "NAIC Teleconnections Demonstrator"
+  version: "1.0"
+  repository: "https://github.com/NAICNO/wp7-UC1-climate-indices-teleconnection"
+  documentation: "https://naicno.github.io/wp7-UC1-climate-indices-teleconnection/"
+
+prerequisites:
+  - "SSH access to NAIC Orchestrator VM"
+  - "VM IP address"
+  - "SSH key path (.pem file)"
+
+environment_check:
+  description: "Check VM environment before setup"
+  commands:
+    - description: "Check module system"
+      command: "module avail python/3 2>/dev/null || echo 'No module system'"
+    - description: "Check GPU"
+      command: "nvidia-smi 2>/dev/null || echo 'No NVIDIA GPU'"
+    - description: "Check Python"
+      command: "python3 --version"
+
+vm_init:
+  description: "Initialize VM environment"
+  module_system:
+    description: "If module system available (recommended)"
+    check_command: "module avail python/3"
+    load_command: "module load Python/3.11.5-GCCcore-13.2.0"
+    available_modules:
+      - "Python/3.11.5-GCCcore-13.2.0"
+      - "Python/3.11.3-GCCcore-12.3.0"
+      - "Python/3.10.8-GCCcore-12.2.0"
+  apt_packages:
+    description: "If no module system (install packages)"
+    command: "sudo apt update -y && sudo apt install -y build-essential git python3-dev python3-venv python3-pip libssl-dev zlib1g-dev"
+    packages:
+      - name: "build-essential"
+        description: "Compiler toolchain (gcc, make)"
+      - name: "git"
+        description: "Version control"
+      - name: "python3-dev"
+        description: "Python development headers"
+      - name: "python3-venv"
+        description: "Python virtual environment"
+      - name: "python3-pip"
+        description: "Python package manager"
+
+gpu_setup:
+  description: "GPU/CUDA setup for NVIDIA GPUs"
+  check_command: "nvidia-smi"
+  cuda_symlinks:
+    directory: "$HOME/cuda_link"
+    commands:
+      - "mkdir -p $HOME/cuda_link"
+      - "ln -sf /lib/x86_64-linux-gnu/libcuda.so.1 $HOME/cuda_link/libcuda.so.1"
+      - "ln -sf /lib/x86_64-linux-gnu/libcuda.so.1 $HOME/cuda_link/libcuda.so"
+    environment: "export LD_LIBRARY_PATH=$HOME/cuda_link:$LD_LIBRARY_PATH"
+
+setup:
+  description: "Clone and set up the environment on the VM"
+  commands:
+    - step: 1
+      description: "Check/load Python module (if available)"
+      command: "module load Python/3.11.5-GCCcore-13.2.0 2>/dev/null || true"
+      optional: true
+    - step: 2
+      description: "Clone repository"
+      command: "git clone https://github.com/NAICNO/wp7-UC1-climate-indices-teleconnection.git"
+    - step: 3
+      description: "Enter directory"
+      command: "cd d7.2-Use-case1"
+    - step: 4
+      description: "Run setup script (auto-detects environment)"
+      command: "./setup.sh"
+    - step: 5
+      description: "Activate environment"
+      command: "source venv/bin/activate"
+
+jupyter:
+  description: "Start Jupyter Lab for interactive exploration"
+  start_command: "jupyter lab --no-browser --ip=0.0.0.0 --port=8888 --NotebookApp.token='' --NotebookApp.password=''"
+  tunnel_command: "ssh -v -N -L 8888:localhost:8888 -i <SSH_KEY_PATH> ubuntu@<VM_IP>"
+  tunnel_alt_port: "ssh -v -N -L 9999:localhost:8888 -i <SSH_KEY_PATH> ubuntu@<VM_IP>"
+  browser_url: "http://localhost:8888/lab/tree/demonstrator-v1.orchestrator.ipynb"
+  notebook_file: "demonstrator-v1.orchestrator.ipynb"
+  notes:
+    - "Tunnel appears to 'hang' after connecting - this is normal behavior"
+    - "Keep the terminal open while using Jupyter"
+    - "Press Ctrl+C to close the tunnel"
+    - "If port 8888 is in use, use tunnel_alt_port and access via localhost:9999"
+
+cli:
+  description: "Run experiments from command line"
+  main_script: "scripts/lrbased_teleconnection/main.py"
+  quick_test:
+    description: "Quick test run (< 1 minute)"
+    command: |
+      python scripts/lrbased_teleconnection/main.py \
+        --data_file dataset/noresm-f-p1000_slow_new_jfm.csv \
+        --target_feature amo2 \
+        --modelname LinearRegression \
+        --max_allowed_features 3 \
+        --end_lag 30 \
+        --n_ensembles 5
+
+parameters:
+  required:
+    - name: "--data_file"
+      description: "Path to dataset CSV"
+      example: "dataset/noresm-f-p1000_slow_new_jfm.csv"
+    - name: "--target_feature"
+      description: "Variable to predict"
+      example: "amo2"
+    - name: "--modelname"
+      description: "ML model to use"
+      example: "LinearRegression"
+  optional:
+    - name: "--max_allowed_features"
+      description: "Maximum features for model"
+      default: 6
+      range: "3-32"
+    - name: "--end_lag"
+      description: "Maximum lag in years"
+      default: 50
+      range: "20-150"
+    - name: "--step_lag"
+      description: "Lag step size"
+      default: 5
+    - name: "--splitsize"
+      description: "Train/test split ratio"
+      default: 0.6
+    - name: "--n_ensembles"
+      description: "Number of ensemble runs"
+      default: 10
+      range: "1-200"
+    - name: "--with_mean_feature"
+      description: "Include mean feature (flag)"
+      default: false
+
+models:
+  - name: "LinearRegression"
+    description: "Simple baseline for linear relationships"
+    gpu_required: false
+  - name: "RandomForestRegressor"
+    description: "Ensemble model with decision trees"
+    gpu_required: false
+  - name: "MLPRegressor"
+    description: "Neural network for non-linear patterns"
+    gpu_required: false
+  - name: "XGBRegressor"
+    description: "Gradient boosting with GPU support"
+    gpu_required: false
+
+datasets:
+  - file: "dataset/noresm-f-p1000_slow_new_jfm.csv"
+    description: "Historical SLOW forcing (850-2005 AD)"
+  - file: "dataset/noresm-f-p1000_shigh_new_jfm.csv"
+    description: "Historical HIGH forcing (850-2005 AD)"
+  - file: "dataset/noresm-f-p1000_picntrl_new_jfm.csv"
+    description: "Pre-industrial control (1000 years)"
+
+target_features:
+  common:
+    - "amo1"
+    - "amo2"
+    - "amo3"
+    - "AMOCann"
+    - "amoSSTann"
+    - "naoPSLjfm"
+    - "ensoSSTjfm"
+
+directory_structure:
+  vm_init_script: "vm-init.sh"
+  setup_script: "setup.sh"
+  virtual_env: "venv/"
+  datasets: "dataset/"
+  scripts: "scripts/lrbased_teleconnection/"
+  main_script: "scripts/lrbased_teleconnection/main.py"
+  results: "results/"
+  notebook: "demonstrator-v1.orchestrator.ipynb"
+
+troubleshooting:
+  - issue: "git: command not found"
+    solution: "sudo apt install -y git OR check module system"
+  - issue: "python3: command not found"
+    solution: "module load Python/3.11.5-GCCcore-13.2.0"
+  - issue: "Python version too old"
+    solution: "Load newer Python module"
+  - issue: "No GPU detected"
+    solution: "CPU-only mode will be used automatically"
+  - issue: "CUDA errors"
+    solution: "Run ./vm-init.sh to setup CUDA symlinks"
+  - issue: "SSH tunnel appears to hang"
+    solution: "This is normal - tunnel is active. Keep terminal open."
+  - issue: "Port 8888 permission denied or in use"
+    solution: "Use alternative port: ssh -v -N -L 9999:localhost:8888 ..."
+  - issue: "venv already exists error"
+    solution: "Rerun ./setup.sh (it will reuse existing venv) or rm -rf venv && ./setup.sh"
+
+verification:
+  steps:
+    - description: "Check results directory"
+      command: "ls results/"
+      expected: "New CSV and PNG files created"
+    - description: "Verify CSV output"
+      check: "CSV contains corr_score and mae_score columns"
+    - description: "Check for errors"
+      check: "No Python errors in output"
+    - description: "Verify GPU support (optional)"
+      command: "python -c \"import torch; print(f'CUDA: {torch.cuda.is_available()}')\""
+  success_criteria:
+    - "corr_score > 0.7 indicates good model performance"
+    - "Results saved to results/ directory"
